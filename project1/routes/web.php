@@ -16,3 +16,59 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('homePage', function()
+{
+    //return view('homePage');
+    //return "WSB";
+    //return ['name' => 'WSB', 'base' => 'classic'];
+    //return view('homePage', ['firstname' => 'Janusz', 'lastname' => 'Kowalski']);
+});
+
+Route::get('pages/{x}', function($x)
+{
+    $pages = [
+        'contact' => "Strona WSB",
+        'home' => "Strona domowa"
+    ];
+    return $pages[$x];
+});
+
+Route::get('address/{city}/{street}/{zipcode?}', function(string $city, string $street, int $zipcode = null)
+{
+    if($zipcode == null)
+    {
+        $zipcode = '-';
+    }
+    else
+    {
+        $zipcode = substr($zipcode,0,2)."-".substr($zipcode,2,3);
+    }
+
+    echo <<<ADDRESS
+        Miasto : $city, ulica : $street, <br>
+        Kod pocztowy : $zipcode
+    ADDRESS;
+});
+
+Route::redirect('adres/{city}/{street}/{zipcode?}','/address/{city}/{street}/{zipcode?}');
+
+Route::prefix('admin') -> group(function()
+{
+    Route::get('home/{name}', function(string $name)
+    {
+        echo "Witaj $name na stronie administracyjnenj";
+    })->where(['name' => '[A-z]+']);
+
+    Route::get('users', function()
+    {
+        echo "Użytkownicy systemu";
+    });
+});
+
+Route::redirect('admin/{name}', '/admin/home/{name}');
+
+Route::get('homePage', function()
+{
+    return view('homePage', ['firstname' => 'Janusz', 'lastname' => 'Kowalski', 'city' => 'Poznań']);
+});
