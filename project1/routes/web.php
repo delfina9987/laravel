@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\wsbController;
+use App\Http\Controllers\PageController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
 
 Route::get('homePage', function()
 {
@@ -72,3 +76,15 @@ Route::get('homePage', function()
 {
     return view('homePage', ['firstname' => 'Janusz', 'lastname' => 'Kowalski', 'city' => 'Poznań']);
 });
+
+
+Route::get("wsb", [wsbController::class, "index"]); // to działa jeśli jest use na górze
+
+//Route::get("wsb", "App\Http\Controllers\wsbController@index"); // to działa bez use na górze
+
+Route::get("drives/{drives}", [PageController::class, "show"]); // to działa jeśli jest use na górze
+
+
+Route::view("useform", view: "useform");
+
+Route::post("UserController", [UserController::class, "account"]); // to działa jeśli jest use na górze
